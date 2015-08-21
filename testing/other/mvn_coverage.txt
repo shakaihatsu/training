@@ -1,0 +1,16 @@
+JaCoCo
+------
+// Unit test coverage
+clean org.jacoco:jacoco-maven-plugin:prepare-agent test -Dmaven.test.failure.ignore=true
+// Integration test coverage
+org.jacoco:jacoco-maven-plugin:prepare-agent-integration failsafe:integration-test -Dmaven.test.failure.ignore=true
+// Prepare deployment for functional test coverage
+org.jacoco:jacoco-maven-plugin:instrument package -Dmaven.test.skip=true
+// Deploy. Merge functional test coverage data into the integration test coverage data 
+-Djacoco-agent.destfile=jacoco-it.exec
+// Restore instrumented classes to be able to publish to sonar
+org.jacoco:jacoco-maven-plugin:restore-instrumented-classes
+// Publish to SonarQube
+sonar:sonar
+
+help:describe -Dplugin=org.jacoco:jacoco-maven-plugin -Ddetail
